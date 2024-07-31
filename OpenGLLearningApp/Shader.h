@@ -21,11 +21,18 @@ public:
 	GLuint GetUniformAmbientIntensityLocation();
 	GLuint GetUniformDirectionLocation();
 	GLuint GetUniformDiffuseIntensityLocation();
+	GLuint GetUniformShininessLocation();
+	GLuint GetUniformSpecularIntensityLocation();
+	GLuint GetUniformEyeLocation();
 	Shader();
 	~Shader();
 
 private:
-	GLuint uniformTransformModel, uniformProjectionModel, uniformViewModel, uniformAmbientColour, uniformAmbientIntensity, uniformDirection, uniformDiffuseIntensity, shaderID;
+	GLuint uniformTransformModel, uniformProjectionModel, uniformViewModel, uniformEyePosition, 
+		uniformAmbientColour, uniformAmbientIntensity, 
+		uniformDirection, uniformDiffuseIntensity, 
+		uniformSpecularIntensity, uniformShininess,
+		shaderID;
 	void AddShader(GLuint theProgram, const char* shaderProgram, GLenum shaderType);
 	void CompileShaders(const char* vShader, const char* fShader);
 	std::string ReadFile(const char* fileLocation);
