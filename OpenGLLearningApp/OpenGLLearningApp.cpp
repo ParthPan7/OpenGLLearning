@@ -55,9 +55,9 @@ void calcAverageNormals(GLint* indices, unsigned int indicesCount,  GLfloat* ver
 {
     for (size_t i = 0; i < indicesCount; i += 3)
     {
-        GLint in0 = indices[i];
-        GLint in1 = indices[i + 1];
-        GLint in2 = indices[i + 2];
+        GLint in0 = indices[i] * vLength;
+        GLint in1 = indices[i + 1] * vLength;
+        GLint in2 = indices[i + 2] * vLength;
 
         glm::vec3 v1(vertices[in1]-vertices[in0], vertices[in1+1] - vertices[in0+1], vertices[in1+2]-vertices[in0+2]);
         glm::vec3 v2(vertices[in2]-vertices[in0], vertices[in2+1] - vertices[in0+1], vertices[in2+2]-vertices[in0+2]);
@@ -96,7 +96,7 @@ void CreateObjects()
         0.0f,  1.0f,  0.0f,  0.5f, 1.0f,  0.0f, 0.0f, 0.0f,
         0.0f, -1.0f,  1.0f,  0.5f, 0.0f,  0.0f, 0.0f, 0.0f
     };
-    // calcAverageNormals(indices, 12, vertices, 32, 8, 5); -- needs fixing 
+    calcAverageNormals(indices, 12, vertices, 32, 8, 5); 
     Mesh* mesh = new Mesh();
     meshes.push_back(mesh);
     meshes[0]->CreateMesh(indices, vertices, 12, 32);
@@ -126,7 +126,7 @@ int main()
     brickTexture = Texture("Textures/brick.png");
     brickTexture.LoadTexture();
 
-    Light light = Light(1.0f, 1.0f, 1.0f, 0.2f, 
+    Light light = Light(1.0f, 1.0f, 1.0f, 0.5f, 
         2.0f, -1.0f, -2.0f, 1.0f);
     transformModel = shaders[0]->GetUniformTransformModelLocation();
     projection = shaders[0]->GetUniformProjectionModelLocation();
