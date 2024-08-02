@@ -99,7 +99,7 @@ void CreateObjects()
     };
     GLfloat vertices[] = {
        // X     Y      Z      U      V    nx    ny  nz
-           -1.0f, -1.0f, 0.0f,  0.0f, 0.0f,  0.0f, 0.0f, 0.0f,
+     -1.0f, -1.0f, 0.0f,  0.0f, 0.0f,  0.0f, 0.0f, 0.0f,
      0.0f, -1.0f, 1.0f,  0.5f, 0.0f,  0.0f, 0.0f, 0.0f,
      1.0f, -1.0f, 0.0f,  1.0f, 0.0f,  0.0f, 0.0f, 0.0f,
      0.0f,  1.0f, 0.0f,  0.5f, 1.0f,  0.0f, 0.0f, 0.0f
@@ -134,8 +134,8 @@ int main()
     brickTexture = Texture("Textures/brick.png");
     brickTexture.LoadTexture();
 
-    Light light = Light(1.0f, 1.0f, 1.0f, 1.0f, 
-        1.0f, -1.0f, -1.0f, 0.7f);
+    Light light = Light(1.0f, 1.0f, 1.0f, 0.2f, 
+        1.0f, -1.0f, -1.0f, 1.0f);
     transformModel = shaders[0]->GetUniformTransformModelLocation();
     projection = shaders[0]->GetUniformProjectionModelLocation();
     view = shaders[0]->GetUniformViewModelLocation();
