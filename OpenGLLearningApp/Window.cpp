@@ -12,6 +12,7 @@ Window::Window()
     }
     xChange = 0.0f;
     yChange = 0.0f;
+    hasMouseMovedFirstTime = false;
 }
 
 Window::~Window()
@@ -99,12 +100,10 @@ void Window::handleKeys(GLFWwindow* window, int key, int scancode, int action, i
         if (action == GLFW_PRESS)
         {
             theWindow->keys[key] = true;
-           // printf("key pressed %d", key);
         }
         if (action == GLFW_RELEASE)
         {
             theWindow->keys[key] = false;
-           // printf("key released %d", key);
         }
     }
 }
@@ -112,7 +111,7 @@ void Window::handleKeys(GLFWwindow* window, int key, int scancode, int action, i
 void Window::handleMouse(GLFWwindow* window, double xPos, double yPos)
 {
     Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
-    if (theWindow->hasMouseMovedFirstTime)
+    if (theWindow->hasMouseMovedFirstTime == true)
     {
         theWindow->xLast = xPos;
         theWindow->yLast = yPos;
@@ -123,8 +122,6 @@ void Window::handleMouse(GLFWwindow* window, double xPos, double yPos)
 
     theWindow->xLast = xPos;
     theWindow->yLast = yPos;
-
-    //printf(" X: %.6f, Y:%.6f \n",theWindow->xChange, theWindow->yChange);
 }
 
 GLfloat Window::GetXChange()
