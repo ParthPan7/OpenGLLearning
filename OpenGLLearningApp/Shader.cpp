@@ -86,6 +86,11 @@ Shader::Shader()
     uniformProjectionModel = 0;
     uniformTransformModel = 0;
     uniformViewModel = 0;
+    uniformAmbientColour = 0;
+    uniformAmbientIntensity = 0;
+    uniformDirection = 0;
+    uniformDiffuseIntensity = 0;
+    uniformEyePosition = 0;
     uniformShininess = 0;
     uniformSpecularIntensity = 0;
 }
