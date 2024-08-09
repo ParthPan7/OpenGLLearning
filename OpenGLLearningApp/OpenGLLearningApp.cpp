@@ -21,7 +21,7 @@
 #include "Window.h"
 #include "Camera.h"
 #include "Texture.h"
-#include "Light.h"
+#include "DirectionalLight.h"
 #include "Material.h"
 
 GLuint transformModel, projection, view, ambientColour, ambientIntensity, eyePosition, 
@@ -134,8 +134,9 @@ int main()
     brickTexture = Texture("Textures/brick.png");
     brickTexture.LoadTexture();
 
-    Light light = Light(1.0f, 1.0f, 1.0f, 0.2f, 
-        1.0f, -1.0f, -1.0f, 1.0f);
+    DirectionalLight mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 
+        0.2f, 0.5f, 
+        1.0f, -1.0f, -1.0f);
     transformModel = shaders[0]->GetUniformTransformModelLocation();
     projection = shaders[0]->GetUniformProjectionModelLocation();
     view = shaders[0]->GetUniformViewModelLocation();
@@ -189,7 +190,7 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shaders[0]->UseShader();
-        light.UseLight(ambientIntensity, ambientColour, directionLightVec, diffuseIntensity);
+        mainLight.UseLight(ambientIntensity, ambientColour, directionLightVec, diffuseIntensity);
             glUniformMatrix4fv(transformModel, 1, GL_FALSE, glm::value_ptr(_transformModel));
             glUniformMatrix4fv(projection, 1, GL_FALSE, glm::value_ptr(_projection));
             glUniformMatrix4fv(view, 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
