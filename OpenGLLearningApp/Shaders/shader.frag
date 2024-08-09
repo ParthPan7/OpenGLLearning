@@ -30,7 +30,7 @@ void main()
 {                               
     vec4 ambientLight = vec4(directionalLight.colour, 1.0f) * directionalLight.ambientIntensity;  
     float diffuseFactor = max(dot(normalize(Normal), normalize(directionalLight.direction)), 0.0f);
-    vec4 diffuseLight = vec4(directionalLight.direction, 1.0f) * directionalLight.diffuseIntensity * diffuseFactor;
+    vec4 diffuseLight = vec4(directionalLight.colour, 1.0f) * directionalLight.diffuseIntensity * diffuseFactor;
     color = texture(theTexture, texCoord);
     
     vec4 specularLight = vec4(0.0f, 0.0f, 0.0f, 0.0f);
