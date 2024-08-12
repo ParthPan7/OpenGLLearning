@@ -5,6 +5,10 @@
 #include <fstream>
 #include <string>
 #include <sstream> 
+
+#include "DirectionalLight.h"
+#include "PointLight.h"
+
 using namespace std;
 class Shader
 {
@@ -24,15 +28,24 @@ public:
 	GLuint GetUniformShininessLocation();
 	GLuint GetUniformSpecularIntensityLocation();
 	GLuint GetUniformEyeLocation();
+
+	void SetDirectionalLight(DirectionalLight* directionalLight);
+
 	Shader();
 	~Shader();
 
 private:
 	GLuint uniformTransformModel, uniformProjectionModel, uniformViewModel, uniformEyePosition, 
-		uniformAmbientColour, uniformAmbientIntensity, 
-		uniformDirection, uniformDiffuseIntensity, 
 		uniformSpecularIntensity, uniformShininess,
 		shaderID;
+
+	struct {
+		GLuint uniformColour;
+		GLuint uniformAmbientIntensity;
+		GLuint uniformDirection;
+		GLuint uniformDiffuseIntensity;
+	}uniformDirectionalLight;
+
 	void AddShader(GLuint theProgram, const char* shaderProgram, GLenum shaderType);
 	void CompileShaders(const char* vShader, const char* fShader);
 	std::string ReadFile(const char* fileLocation);

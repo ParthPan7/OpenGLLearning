@@ -135,15 +135,12 @@ int main()
     brickTexture.LoadTexture();
 
     DirectionalLight mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 
-        0.2f, 0.5f, 
+        0.3f, 0.5f, 
         1.0f, -1.0f, -1.0f);
     transformModel = shaders[0]->GetUniformTransformModelLocation();
     projection = shaders[0]->GetUniformProjectionModelLocation();
     view = shaders[0]->GetUniformViewModelLocation();
-    ambientColour = shaders[0]->GetUniformAmbientColourLocation();
-    ambientIntensity = shaders[0]->GetUniformAmbientIntensityLocation();
-    directionLightVec = shaders[0]->GetUniformDirectionLocation();
-    diffuseIntensity = shaders[0]->GetUniformDiffuseIntensityLocation();
+    
     specularIntensity = shaders[0]->GetUniformSpecularIntensityLocation();
     shininess = shaders[0]->GetUniformShininessLocation();
     eyePosition = shaders[0]->GetUniformEyeLocation();
@@ -190,7 +187,7 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shaders[0]->UseShader();
-        mainLight.UseLight(ambientIntensity, ambientColour, directionLightVec, diffuseIntensity);
+        shaders[0]->SetDirectionalLight(&mainLight);
             glUniformMatrix4fv(transformModel, 1, GL_FALSE, glm::value_ptr(_transformModel));
             glUniformMatrix4fv(projection, 1, GL_FALSE, glm::value_ptr(_projection));
             glUniformMatrix4fv(view, 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
