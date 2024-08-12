@@ -22,6 +22,8 @@
 #include "Camera.h"
 #include "Texture.h"
 #include "DirectionalLight.h"
+#include "PointLight.h"
+#include "CommonValues.h"
 #include "Material.h"
 
 GLuint transformModel, projection, view, ambientColour, ambientIntensity, eyePosition, 
@@ -39,6 +41,8 @@ Texture brickTexture;
 Material shinyMaterial = Material(1.0f, 32.0f);
 
 Material dullMaterial = Material(0.5f, 4.0f);
+
+PointLight pointLights[MAX_POINT_LIGHTS];
 //moving object around x-axis
 const float xIncrement = 0.005f;
 const float xMaxIncrementedValue = 0.2f;
@@ -135,8 +139,16 @@ int main()
     brickTexture.LoadTexture();
 
     DirectionalLight mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 
-        0.3f, 0.5f, 
+        0.2f, 0.5f, 
         1.0f, -1.0f, -1.0f);
+
+    unsigned int pointLightCount = 0;
+    pointLights[0] = PointLight(0.0f, 0.0f, 1.0f,
+                                0.1f, 1.0f,
+                                -4.0f, 0.0f, 0.0f,
+                                0.3f, 0.2f, 0.1f);
+    pointLightCount++;
+
     transformModel = shaders[0]->GetUniformTransformModelLocation();
     projection = shaders[0]->GetUniformProjectionModelLocation();
     view = shaders[0]->GetUniformViewModelLocation();
@@ -188,6 +200,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         shaders[0]->UseShader();
         shaders[0]->SetDirectionalLight(&mainLight);
+        shaders[0]->SetPointLights(pointLights, pointLightCount);
             glUniformMatrix4fv(transformModel, 1, GL_FALSE, glm::value_ptr(_transformModel));
             glUniformMatrix4fv(projection, 1, GL_FALSE, glm::value_ptr(_projection));
             glUniformMatrix4fv(view, 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
