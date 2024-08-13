@@ -36,11 +36,12 @@ Camera camera;
 
 Texture dirtTexture;
 Texture brickTexture;
+Texture plainTexture;
 
 //Material definitions
 Material shinyMaterial = Material(1.0f, 32.0f);
 
-Material dullMaterial = Material(0.5f, 4.0f);
+Material dullMaterial = Material(0.5f, 8.0f);
 
 PointLight pointLights[MAX_POINT_LIGHTS];
 //moving object around x-axis
@@ -108,6 +109,19 @@ void CreateObjects()
      1.0f, -1.0f, 0.0f,  1.0f, 0.0f,  0.0f, 0.0f, 0.0f,
      0.0f,  1.0f, 0.0f,  0.5f, 1.0f,  0.0f, 0.0f, 0.0f
     };
+
+    GLint floorIndices[] = {
+        0, 2, 1,
+        1, 2, 3
+    };
+
+    GLfloat floorVertices[] = {
+        -10.0f, 0.0f, -10.0f,   0.0f, 0.0f,  0.0f, -1.0f, 0.0f,
+        10.0f, 0.0f, -10.0f,   10.0f, 0.0f,  0.0f, -1.0f, 0.0f,
+        -10.0f, 0.0f, 10.0f,   0.0f, 10.0f,  0.0f, -1.0f, 0.0f,
+        10.0f, 0.0f, 10.0f,    10.0f, 10.0f, 0.0f, -1.0f, 0.0f  
+    };
+
     calcAverageNormals(indices, 12, vertices, 32, 8, 5); 
     Mesh* mesh = new Mesh();
     meshes.push_back(mesh);
@@ -116,6 +130,10 @@ void CreateObjects()
     Mesh* mesh1 = new Mesh();
     meshes.push_back(mesh1);
     meshes[1]->CreateMesh(indices, vertices, 12, 32);
+    
+    Mesh* floorMesh = new Mesh();
+    meshes.push_back(floorMesh);
+    meshes[2]->CreateMesh(floorIndices, floorVertices, 6, 32);
 }
 
 void CreateShaders()
@@ -137,15 +155,25 @@ int main()
 
     brickTexture = Texture("Textures/brick.png");
     brickTexture.LoadTexture();
+    
+    plainTexture = Texture("Textures/plain.png");
+    plainTexture.LoadTexture();
 
     DirectionalLight mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 
-        0.2f, 0.5f, 
+        0.1f, 0.1f, 
         1.0f, -1.0f, -1.0f);
 
     unsigned int pointLightCount = 0;
     pointLights[0] = PointLight(0.0f, 0.0f, 1.0f,
-                                0.1f, 1.0f,
-                                -4.0f, 0.0f, 0.0f,
+                                0.2f, 1.0f,
+                                -4.0f, -1.0f, 0.0f,
+                                0.3f, 0.2f, 0.1f);
+
+    pointLightCount++;
+    
+    pointLights[1] = PointLight(0.0f, 1.0f, 0.0f,
+                                 0.2f, 1.0f,
+                                 4.0f, 2.0f, 0.0f,
                                 0.3f, 0.2f, 0.1f);
     pointLightCount++;
 
@@ -219,7 +247,17 @@ int main()
             dirtTexture.UseTexture();
             dullMaterial.UseMaterial(specularIntensity, shininess);
             meshes[1]->RenderMesh();
-        
+
+            _transformModel = glm::mat4(1.0f);
+            _transformModel = glm::translate(_transformModel, glm::vec3(0.0f, -0.3f, 0.0f));
+            //_transformModel = glm::scale(_transformModel, glm::vec3(0.25f, 0.25f, 0.25f));
+            glUniformMatrix4fv(transformModel, 1, GL_FALSE, glm::value_ptr(_transformModel));
+            glUniformMatrix4fv(projection, 1, GL_FALSE, glm::value_ptr(_projection));
+            glUniformMatrix4fv(view, 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
+            plainTexture.UseTexture();
+            shinyMaterial.UseMaterial(specularIntensity, shininess);
+            meshes[2]->RenderMesh();
+            
         glUseProgram(0);
         window->WindowSwapBuffers();
     }
