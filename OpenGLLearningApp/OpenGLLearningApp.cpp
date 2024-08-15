@@ -23,6 +23,7 @@
 #include "Texture.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "SpotLight.h"
 #include "CommonValues.h"
 #include "Material.h"
 
@@ -44,6 +45,8 @@ Material shinyMaterial = Material(1.0f, 32.0f);
 Material dullMaterial = Material(0.5f, 8.0f);
 
 PointLight pointLights[MAX_POINT_LIGHTS];
+SpotLight spotLights[MAX_SPOT_LIGHTS];
+
 //moving object around x-axis
 const float xIncrement = 0.005f;
 const float xMaxIncrementedValue = 0.2f;
@@ -160,8 +163,8 @@ int main()
     plainTexture.LoadTexture();
 
     DirectionalLight mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 
-        0.1f, 0.1f, 
-        1.0f, -1.0f, -1.0f);
+                                                        0.4f, 0.0f, 
+                                                1.0f, -1.0f, -1.0f);
 
     unsigned int pointLightCount = 0;
     pointLights[0] = PointLight(0.0f, 0.0f, 1.0f,
@@ -176,6 +179,16 @@ int main()
                                  4.0f, 2.0f, 0.0f,
                                 0.3f, 0.2f, 0.1f);
     pointLightCount++;
+
+    unsigned int spotLightCount = 0;
+    spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
+                                    0.0f, 1.0f,
+                              0.0f,  0.0f, 0.0f,
+                              0.0f, -1.0f, 0.0f,
+                              0.3f, 0.2f, 0.1f,
+                                        60.0f);
+
+    spotLightCount++;
 
     transformModel = shaders[0]->GetUniformTransformModelLocation();
     projection = shaders[0]->GetUniformProjectionModelLocation();
@@ -229,6 +242,8 @@ int main()
         shaders[0]->UseShader();
         shaders[0]->SetDirectionalLight(&mainLight);
         shaders[0]->SetPointLights(pointLights, pointLightCount);
+        shaders[0]->SetSpotLights(spotLights, spotLightCount);
+        
             glUniformMatrix4fv(transformModel, 1, GL_FALSE, glm::value_ptr(_transformModel));
             glUniformMatrix4fv(projection, 1, GL_FALSE, glm::value_ptr(_projection));
             glUniformMatrix4fv(view, 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
@@ -254,7 +269,7 @@ int main()
             glUniformMatrix4fv(transformModel, 1, GL_FALSE, glm::value_ptr(_transformModel));
             glUniformMatrix4fv(projection, 1, GL_FALSE, glm::value_ptr(_projection));
             glUniformMatrix4fv(view, 1, GL_FALSE, glm::value_ptr(camera.GetViewMatrix()));
-            plainTexture.UseTexture();
+            dirtTexture.UseTexture();
             shinyMaterial.UseMaterial(specularIntensity, shininess);
             meshes[2]->RenderMesh();
             
